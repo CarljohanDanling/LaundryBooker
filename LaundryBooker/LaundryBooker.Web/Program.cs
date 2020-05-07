@@ -1,4 +1,4 @@
-namespace LaundryBooker.WebApp
+namespace LaundryBooker.Web
 {
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Hosting;
