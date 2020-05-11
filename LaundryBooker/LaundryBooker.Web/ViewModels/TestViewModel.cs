@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace LaundryBooker.Web.ViewModels
+﻿namespace LaundryBooker.Web.ViewModels
 {
     public class TestViewModel
     {
+        public string TestMessage { get; set; }
     }
 }
