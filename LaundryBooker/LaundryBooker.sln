@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LaundryBooker.Tests", "Laun
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LaundryBooker.Api", "LaundryBooker.Api\LaundryBooker.Api.csproj", "{7257BA0D-2FBF-416F-9471-44106330FD5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LaundryBooker.Web", "LaundryBooker.Web\LaundryBooker.Web.csproj", "{8F79EB7B-8104-4C2D-B6CA-35FCAE7C0446}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LaundryBooker.Web", "LaundryBooker.Web\LaundryBooker.Web.csproj", "{8F79EB7B-8104-4C2D-B6CA-35FCAE7C0446}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LaundryBooker.Data", "LaundryBooker.Data\LaundryBooker.Data.csproj", "{0FB6D8B5-9F05-4699-B979-4A532545109E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LaundryBooker.Data", "LaundryBooker.Data\LaundryBooker.Data.csproj", "{0FB6D8B5-9F05-4699-B979-4A532545109E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LaundryBooker.Engine", "LaundryBooker.Engine\LaundryBooker.Engine.csproj", "{05D7594B-1B6D-45E7-8FE8-E8AD365C2F10}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{0FB6D8B5-9F05-4699-B979-4A532545109E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FB6D8B5-9F05-4699-B979-4A532545109E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FB6D8B5-9F05-4699-B979-4A532545109E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05D7594B-1B6D-45E7-8FE8-E8AD365C2F10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05D7594B-1B6D-45E7-8FE8-E8AD365C2F10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05D7594B-1B6D-45E7-8FE8-E8AD365C2F10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05D7594B-1B6D-45E7-8FE8-E8AD365C2F10}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
