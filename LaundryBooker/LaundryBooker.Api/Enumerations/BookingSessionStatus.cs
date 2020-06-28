@@ -1,4 +1,4 @@
-﻿namespace LaundryBooker.Data.Enumerations
+﻿namespace LaundryBooker.Api.Enumerations
 {
     enum BookingSessionStatus
     {
