@@ -48,7 +48,8 @@ namespace LaundryBooker.Api.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BuildingId = table.Column<int>(nullable: false)
+                    BuildingId = table.Column<int>(nullable: false),
+                    RoomStatus = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -62,14 +63,34 @@ namespace LaundryBooker.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BookingSessions",
+                name: "Tenants",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DueDate = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    ApartmentId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tenants", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tenants_Apartments_ApartmentId",
+                        column: x => x.ApartmentId,
+                        principalTable: "Apartments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookingSessions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
                     StartTime = table.Column<DateTimeOffset>(nullable: false),
                     EndTime = table.Column<DateTimeOffset>(nullable: false),
+                    SessionStatus = table.Column<string>(nullable: false),
+                    TenantId = table.Column<int>(nullable: false),
                     LaundryRoomId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -81,34 +102,37 @@ namespace LaundryBooker.Api.Migrations
                         principalTable: "LaundryRooms",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookingSessions_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "Id");
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Tenants",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    ApartmentId = table.Column<int>(nullable: false),
-                    BookingSessionId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tenants", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Tenants_Apartments_ApartmentId",
-                        column: x => x.ApartmentId,
-                        principalTable: "Apartments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Tenants_BookingSessions_BookingSessionId",
-                        column: x => x.BookingSessionId,
-                        principalTable: "BookingSessions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
+            migrationBuilder.InsertData(
+                table: "Buildings",
+                columns: new[] { "Id", "HouseNumber", "HousePrefix", "StreetAddress" },
+                values: new object[] { 1, 48, "B", "Helenius Gata" });
+
+            migrationBuilder.InsertData(
+                table: "Apartments",
+                columns: new[] { "Id", "ApartmentNumber", "BuildingId" },
+                values: new object[] { 2, 14, 1 });
+
+            migrationBuilder.InsertData(
+                table: "LaundryRooms",
+                columns: new[] { "Id", "BuildingId", "RoomStatus" },
+                values: new object[] { 23, 1, "Free" });
+
+            migrationBuilder.InsertData(
+                table: "Tenants",
+                columns: new[] { "Id", "ApartmentId", "Name" },
+                values: new object[] { 1, 2, "Calle" });
+
+            migrationBuilder.InsertData(
+                table: "BookingSessions",
+                columns: new[] { "Id", "EndTime", "LaundryRoomId", "SessionStatus", "StartTime", "TenantId" },
+                values: new object[] { new Guid("0306d7f7-b0ca-4937-950a-6f73e278792b"), new DateTimeOffset(new DateTime(2020, 6, 19, 21, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), 23, "Scheduled", new DateTimeOffset(new DateTime(2020, 6, 19, 14, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Apartments_BuildingId",
@@ -121,6 +145,12 @@ namespace LaundryBooker.Api.Migrations
                 column: "LaundryRoomId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BookingSessions_TenantId",
+                table: "BookingSessions",
+                column: "TenantId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_LaundryRooms_BuildingId",
                 table: "LaundryRooms",
                 column: "BuildingId",
@@ -131,28 +161,21 @@ namespace LaundryBooker.Api.Migrations
                 table: "Tenants",
                 column: "ApartmentId",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tenants_BookingSessionId",
-                table: "Tenants",
-                column: "BookingSessionId",
-                unique: true,
-                filter: "[BookingSessionId] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Tenants");
-
-            migrationBuilder.DropTable(
-                name: "Apartments");
-
-            migrationBuilder.DropTable(
                 name: "BookingSessions");
 
             migrationBuilder.DropTable(
                 name: "LaundryRooms");
+
+            migrationBuilder.DropTable(
+                name: "Tenants");
+
+            migrationBuilder.DropTable(
+                name: "Apartments");
 
             migrationBuilder.DropTable(
                 name: "Buildings");

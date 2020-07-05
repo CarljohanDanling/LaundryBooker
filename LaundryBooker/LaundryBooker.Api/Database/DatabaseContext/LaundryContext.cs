@@ -1,7 +1,9 @@
 ﻿namespace LaundryBooker.Api.Database.DatabaseContext
 {
     using LaundryBooker.Api.Database.DatabaseModels;
+    using LaundryBooker.Api.Database.Enumerations;
     using Microsoft.EntityFrameworkCore;
+    using System;
 
     public class LaundryContext : DbContext
     {
@@ -34,14 +36,72 @@
                 .WithOne(t => t.Apartment)
                 .HasForeignKey<Tenant>(t => t.ApartmentId);
 
+            modelBuilder.Entity<Tenant>()
+                .HasOne(t => t.BookingSession)
+                .WithOne(bs => bs.Tenant)
+                .OnDelete(DeleteBehavior.NoAction);
+
             modelBuilder.Entity<LaundryRoom>()
                 .HasOne(lr => lr.Building)
                 .WithOne(b => b.LaundryRoom);
 
             modelBuilder.Entity<LaundryRoom>()
+                .Property(lr => lr.RoomStatus)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<LaundryRoom>()
                 .HasMany(lr => lr.BookingSessions)
                 .WithOne(bs => bs.LaundryRoom)
                 .HasForeignKey(bs => bs.LaundryRoomId);
+
+            modelBuilder.Entity<BookingSession>()
+                .Property(bs => bs.SessionStatus)
+                .HasConversion<string>();
+
+            // SEED DATA
+            modelBuilder.Entity<Building>().HasData(
+                new Building()
+                {
+                    Id = 1,
+                    StreetAddress = "Helenius Gata",
+                    HouseNumber = 48,
+                    HousePrefix = 'B'
+                });
+
+            modelBuilder.Entity<Apartment>().HasData(
+                new Apartment()
+                {
+                    Id = 2,
+                    ApartmentNumber = 14,
+                    BuildingId = 1,
+                });
+
+            modelBuilder.Entity<Tenant>().HasData(
+                new Tenant()
+                {
+                    Id = 1,
+                    Name = "Calle",
+                    ApartmentId = 2
+                });
+
+            modelBuilder.Entity<LaundryRoom>().HasData(
+                new LaundryRoom()
+                {
+                    Id = 23,
+                    BuildingId = 1,
+                    RoomStatus = LaundryRoomStatus.Free
+                });
+
+            modelBuilder.Entity<BookingSession>().HasData(
+                new BookingSession()
+                {
+                    Id = Guid.NewGuid(),
+                    StartTime = new DateTimeOffset(2020, 06, 19, 14, 00, 00, new TimeSpan(2, 0, 0)),
+                    EndTime = new DateTimeOffset(2020, 06, 19, 21, 00, 00, new TimeSpan(2, 0, 0)),
+                    TenantId = 1,
+                    LaundryRoomId = 23,
+                    SessionStatus = BookingSessionStatus.Scheduled
+                });
         }
     }
 }

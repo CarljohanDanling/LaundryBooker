@@ -8,9 +8,6 @@
         public Apartment Apartment { get; set; }
         public int ApartmentId { get; set; }
 
-
-        #nullable enable
-        public virtual BookingSession? BookingSession { get; set; }
-        public int? BookingSessionId { get; set; }
+        public virtual BookingSession BookingSession { get; set; }
     }
 }

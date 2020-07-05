@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LaundryBooker.Api.Migrations
 {
     [DbContext(typeof(LaundryContext))]
-    [Migration("20200628024303_InitialMigration")]
+    [Migration("20200705151535_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,17 +39,21 @@ namespace LaundryBooker.Api.Migrations
                     b.HasIndex("BuildingId");
 
                     b.ToTable("Apartments");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 2,
+                            ApartmentNumber = 14,
+                            BuildingId = 1
+                        });
                 });
 
             modelBuilder.Entity("LaundryBooker.Api.Database.DatabaseModels.BookingSession", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("DueDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("EndTime")
                         .HasColumnType("datetimeoffset");
@@ -57,14 +61,35 @@ namespace LaundryBooker.Api.Migrations
                     b.Property<int>("LaundryRoomId")
                         .HasColumnType("int");
 
+                    b.Property<string>("SessionStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTimeOffset>("StartTime")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("LaundryRoomId");
 
+                    b.HasIndex("TenantId")
+                        .IsUnique();
+
                     b.ToTable("BookingSessions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("0306d7f7-b0ca-4937-950a-6f73e278792b"),
+                            EndTime = new DateTimeOffset(new DateTime(2020, 6, 19, 21, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            LaundryRoomId = 23,
+                            SessionStatus = "Scheduled",
+                            StartTime = new DateTimeOffset(new DateTime(2020, 6, 19, 14, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            TenantId = 1
+                        });
                 });
 
             modelBuilder.Entity("LaundryBooker.Api.Database.DatabaseModels.Building", b =>
@@ -87,6 +112,15 @@ namespace LaundryBooker.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Buildings");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            HouseNumber = 48,
+                            HousePrefix = "B",
+                            StreetAddress = "Helenius Gata"
+                        });
                 });
 
             modelBuilder.Entity("LaundryBooker.Api.Database.DatabaseModels.LaundryRoom", b =>
@@ -99,12 +133,24 @@ namespace LaundryBooker.Api.Migrations
                     b.Property<int>("BuildingId")
                         .HasColumnType("int");
 
+                    b.Property<string>("RoomStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BuildingId")
                         .IsUnique();
 
                     b.ToTable("LaundryRooms");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 23,
+                            BuildingId = 1,
+                            RoomStatus = "Free"
+                        });
                 });
 
             modelBuilder.Entity("LaundryBooker.Api.Database.DatabaseModels.Tenant", b =>
@@ -117,9 +163,6 @@ namespace LaundryBooker.Api.Migrations
                     b.Property<int>("ApartmentId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("BookingSessionId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -128,11 +171,15 @@ namespace LaundryBooker.Api.Migrations
                     b.HasIndex("ApartmentId")
                         .IsUnique();
 
-                    b.HasIndex("BookingSessionId")
-                        .IsUnique()
-                        .HasFilter("[BookingSessionId] IS NOT NULL");
-
                     b.ToTable("Tenants");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ApartmentId = 2,
+                            Name = "Calle"
+                        });
                 });
 
             modelBuilder.Entity("LaundryBooker.Api.Database.DatabaseModels.Apartment", b =>
@@ -150,6 +197,12 @@ namespace LaundryBooker.Api.Migrations
                         .WithMany("BookingSessions")
                         .HasForeignKey("LaundryRoomId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LaundryBooker.Api.Database.DatabaseModels.Tenant", "Tenant")
+                        .WithOne("BookingSession")
+                        .HasForeignKey("LaundryBooker.Api.Database.DatabaseModels.BookingSession", "TenantId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -169,10 +222,6 @@ namespace LaundryBooker.Api.Migrations
                         .HasForeignKey("LaundryBooker.Api.Database.DatabaseModels.Tenant", "ApartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("LaundryBooker.Api.Database.DatabaseModels.BookingSession", "BookingSession")
-                        .WithOne("Tenant")
-                        .HasForeignKey("LaundryBooker.Api.Database.DatabaseModels.Tenant", "BookingSessionId");
                 });
 #pragma warning restore 612, 618
         }
