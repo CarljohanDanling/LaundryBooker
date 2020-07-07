@@ -8,6 +8,6 @@
         public Apartment Apartment { get; set; }
         public int ApartmentId { get; set; }
 
-        public virtual BookingSession BookingSession { get; set; }
+        public BookingSession BookingSession { get; set; }
     }
 }

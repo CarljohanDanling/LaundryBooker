@@ -81,7 +81,7 @@ namespace LaundryBooker.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0306d7f7-b0ca-4937-950a-6f73e278792b"),
+                            Id = new Guid("63e60118-17f9-4f9f-bb0f-de307734c7a3"),
                             EndTime = new DateTimeOffset(new DateTime(2020, 6, 19, 21, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
                             LaundryRoomId = 23,
                             SessionStatus = "Scheduled",

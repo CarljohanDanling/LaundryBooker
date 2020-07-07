@@ -8,6 +8,6 @@
         public Building Building{ get; set; }
         public int BuildingId { get; set; }
         
-        public virtual Tenant Tenant { get; set; }
+        public Tenant Tenant { get; set; }
     }
 }
