@@ -19,8 +19,6 @@
         public DbSet<BookingSession> BookingSessions { get; set; }
 
         // To be implemented:
-        //public DbSet<AvailableSession> AvailableSessions { get; set; }
-        //public DbSet<ReservedSession> ReservedSessions { get; set; }
         //public DbSet<CalendarReservation> CalendarReservations { get; set; }
         //public DbSet<HistoryLog> HistoryLogs { get; set; }
 
@@ -37,7 +35,7 @@
                 .HasForeignKey<Tenant>(t => t.ApartmentId);
 
             modelBuilder.Entity<Tenant>()
-                .HasOne(t => t.BookingSession)
+                .HasMany(t => t.BookingSessions)
                 .WithOne(bs => bs.Tenant)
                 .OnDelete(DeleteBehavior.NoAction);
 
@@ -95,7 +93,18 @@
             modelBuilder.Entity<BookingSession>().HasData(
                 new BookingSession()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("0306d7f7-b0ca-4937-950a-6f73e278792b"),
+                    StartTime = new DateTimeOffset(2020, 06, 14, 14, 00, 00, new TimeSpan(2, 0, 0)),
+                    EndTime = new DateTimeOffset(2020, 06, 14, 21, 00, 00, new TimeSpan(2, 0, 0)),
+                    TenantId = 1,
+                    LaundryRoomId = 23,
+                    SessionStatus = BookingSessionStatus.Finished
+                });
+
+            modelBuilder.Entity<BookingSession>().HasData(
+                new BookingSession()
+                {
+                    Id = Guid.Parse("09dd120c-286b-4891-a8df-7cd616dd65cb"),
                     StartTime = new DateTimeOffset(2020, 06, 19, 14, 00, 00, new TimeSpan(2, 0, 0)),
                     EndTime = new DateTimeOffset(2020, 06, 19, 21, 00, 00, new TimeSpan(2, 0, 0)),
                     TenantId = 1,

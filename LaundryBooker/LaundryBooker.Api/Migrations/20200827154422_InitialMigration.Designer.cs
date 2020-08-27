@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LaundryBooker.Api.Migrations
 {
     [DbContext(typeof(LaundryContext))]
-    [Migration("20200705151535_InitialMigration")]
+    [Migration("20200827154422_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,8 +75,7 @@ namespace LaundryBooker.Api.Migrations
 
                     b.HasIndex("LaundryRoomId");
 
-                    b.HasIndex("TenantId")
-                        .IsUnique();
+                    b.HasIndex("TenantId");
 
                     b.ToTable("BookingSessions");
 
@@ -84,6 +83,15 @@ namespace LaundryBooker.Api.Migrations
                         new
                         {
                             Id = new Guid("0306d7f7-b0ca-4937-950a-6f73e278792b"),
+                            EndTime = new DateTimeOffset(new DateTime(2020, 6, 14, 21, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            LaundryRoomId = 23,
+                            SessionStatus = "Finished",
+                            StartTime = new DateTimeOffset(new DateTime(2020, 6, 14, 14, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
+                            TenantId = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("09dd120c-286b-4891-a8df-7cd616dd65cb"),
                             EndTime = new DateTimeOffset(new DateTime(2020, 6, 19, 21, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)),
                             LaundryRoomId = 23,
                             SessionStatus = "Scheduled",
@@ -200,8 +208,8 @@ namespace LaundryBooker.Api.Migrations
                         .IsRequired();
 
                     b.HasOne("LaundryBooker.Api.Database.DatabaseModels.Tenant", "Tenant")
-                        .WithOne("BookingSession")
-                        .HasForeignKey("LaundryBooker.Api.Database.DatabaseModels.BookingSession", "TenantId")
+                        .WithMany("BookingSessions")
+                        .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });

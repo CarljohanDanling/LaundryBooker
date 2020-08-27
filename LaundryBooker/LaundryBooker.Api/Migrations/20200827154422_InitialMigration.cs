@@ -132,7 +132,12 @@ namespace LaundryBooker.Api.Migrations
             migrationBuilder.InsertData(
                 table: "BookingSessions",
                 columns: new[] { "Id", "EndTime", "LaundryRoomId", "SessionStatus", "StartTime", "TenantId" },
-                values: new object[] { new Guid("0306d7f7-b0ca-4937-950a-6f73e278792b"), new DateTimeOffset(new DateTime(2020, 6, 19, 21, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), 23, "Scheduled", new DateTimeOffset(new DateTime(2020, 6, 19, 14, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), 1 });
+                values: new object[] { new Guid("0306d7f7-b0ca-4937-950a-6f73e278792b"), new DateTimeOffset(new DateTime(2020, 6, 14, 21, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), 23, "Finished", new DateTimeOffset(new DateTime(2020, 6, 14, 14, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), 1 });
+
+            migrationBuilder.InsertData(
+                table: "BookingSessions",
+                columns: new[] { "Id", "EndTime", "LaundryRoomId", "SessionStatus", "StartTime", "TenantId" },
+                values: new object[] { new Guid("09dd120c-286b-4891-a8df-7cd616dd65cb"), new DateTimeOffset(new DateTime(2020, 6, 19, 21, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), 23, "Scheduled", new DateTimeOffset(new DateTime(2020, 6, 19, 14, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 2, 0, 0, 0)), 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Apartments_BuildingId",
@@ -147,8 +152,7 @@ namespace LaundryBooker.Api.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_BookingSessions_TenantId",
                 table: "BookingSessions",
-                column: "TenantId",
-                unique: true);
+                column: "TenantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LaundryRooms_BuildingId",
