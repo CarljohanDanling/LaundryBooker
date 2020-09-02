@@ -1,2 +1,2 @@
 # LaundryBooker
-Coming soon...
+An webapp for laundry booking.
