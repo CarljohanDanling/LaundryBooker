@@ -1,0 +1,42 @@
+﻿@model LaundryBooker.Web.ViewModels.BookerViewModel
+
+<table style="width: 40%">
+    @foreach (var day in Model.BookingSchedule)
+    {
+        <tr>
+            <td>
+                @day.Day.ToShortDateString()
+            </td>
+
+            @foreach (var session in day.BookingSessions)
+            {
+                if (session.IsSessionScheduled)
+                {
+                    <td style="background: red">
+                        @session.StartTime.ToString("t") - @session.EndTime.ToString("t")
+                    </td>
+                }
+
+                else
+                {
+                    <td style="background: lightgreen">
+                        @session.StartTime.ToString("t") - @session.EndTime.ToString("t")
+                    </td>
+                }
+            }
+        </tr>
+    }
+</table>
+
+<br />
+
+<table>
+    <tr>
+        <td style="width: 40px; background: lightgreen"></td>
+        <td>= free</td>
+    </tr>
+    <tr>
+        <td style="background: red"></td>
+        <td>= occupied</td>
+    </tr>
+</table>

@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LaundryBooker.Tests", "LaundryBooker.Tests\LaundryBooker.Tests.csproj", "{E5DE91A5-5479-43D9-A355-1BF40F4119DD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LaundryBooker.Api", "LaundryBooker.Api\LaundryBooker.Api.csproj", "{7257BA0D-2FBF-416F-9471-44106330FD5B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LaundryBooker.Web", "LaundryBooker.Web\LaundryBooker.Web.csproj", "{8F79EB7B-8104-4C2D-B6CA-35FCAE7C0446}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LaundryBooker.Engine", "LaundryBooker.Engine\LaundryBooker.Engine.csproj", "{05D7594B-1B6D-45E7-8FE8-E8AD365C2F10}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LaundryBooker.DataLayer", "LaundryBooker.DataLayer\LaundryBooker.DataLayer.csproj", "{A43D7B9E-AC5A-48B8-9B8B-C78BBCEF310F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +21,6 @@ Global
 		{E5DE91A5-5479-43D9-A355-1BF40F4119DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5DE91A5-5479-43D9-A355-1BF40F4119DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5DE91A5-5479-43D9-A355-1BF40F4119DD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7257BA0D-2FBF-416F-9471-44106330FD5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7257BA0D-2FBF-416F-9471-44106330FD5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7257BA0D-2FBF-416F-9471-44106330FD5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7257BA0D-2FBF-416F-9471-44106330FD5B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8F79EB7B-8104-4C2D-B6CA-35FCAE7C0446}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8F79EB7B-8104-4C2D-B6CA-35FCAE7C0446}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F79EB7B-8104-4C2D-B6CA-35FCAE7C0446}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +29,10 @@ Global
 		{05D7594B-1B6D-45E7-8FE8-E8AD365C2F10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05D7594B-1B6D-45E7-8FE8-E8AD365C2F10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05D7594B-1B6D-45E7-8FE8-E8AD365C2F10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A43D7B9E-AC5A-48B8-9B8B-C78BBCEF310F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A43D7B9E-AC5A-48B8-9B8B-C78BBCEF310F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A43D7B9E-AC5A-48B8-9B8B-C78BBCEF310F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A43D7B9E-AC5A-48B8-9B8B-C78BBCEF310F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

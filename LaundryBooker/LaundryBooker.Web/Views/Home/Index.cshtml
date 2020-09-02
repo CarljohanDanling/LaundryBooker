@@ -1,3 +1,41 @@
-﻿@await Component.InvokeAsync("TestComponent")
+﻿@using System.Globalization
 
-<p>To be continued...!</p>
+@{ var week = ISOWeek.GetWeekOfYear(DateTime.Today);}
+
+<input type="button" id="btnPrevious" class="weekSelector" value="Previous week" />
+<input type="button" id="btnNext" class="weekSelector" value="Next week" />
+
+<div id="schedule">
+    @await Component.InvokeAsync("WeeklyScheduleComponent", week)
+</div>
+
+@section Scripts {
+    <script>
+
+        let selectedWeek = @week;
+
+        $(function() {
+            $(".weekSelector").click(function(e) {
+
+                if (e.currentTarget.id === "btnPrevious") {
+                    selectedWeek = selectedWeek - 1;
+                } else {
+                    selectedWeek = selectedWeek + 1;
+                }
+
+                $.ajax({
+                    type: "GET",
+                    url: "/Home/UpdateViewComponent",
+                    data: { weekNumber: selectedWeek },
+                    dataType: "text",
+                    success: function(data) {
+                        $("#schedule").html(data);
+                    },
+                    error: function(req, status, error) {
+                        alert(error);
+                    }
+                });
+            });
+        });
+    </script>
+}
