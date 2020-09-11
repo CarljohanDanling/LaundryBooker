@@ -1,11 +1,11 @@
 ﻿namespace LaundryBooker.DataLayer.Repository
 {
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Database.DatabaseContext;
-using Database.DatabaseModels;
-using Microsoft.EntityFrameworkCore;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Database.DatabaseContext;
+    using Database.DatabaseModels;
+    using Microsoft.EntityFrameworkCore;
 
     public class TenantRepository : ITenantRepository
     {

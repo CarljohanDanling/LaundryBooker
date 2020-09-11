@@ -1,0 +1,113 @@
+﻿@model LaundryBooker.Web.ViewModels.ScheduleViewModel
+@*Temporary storing CSS in HTML file*@
+<style type="text/css">
+    .paddedTableRows {
+        border-spacing: 0.3em
+    }
+</style>
+
+<div id="week-selector">
+    @using (Html.BeginForm("ChangeWeek", "Home", FormMethod.Get))
+    {
+        <input type="submit" name="weekSelector" value="Previous week" />
+        <input type="submit" name="weekSelector" value="Next week" />
+        @Html.HiddenFor(m => m.WeekNumber, Model.WeekNumber)
+        @Html.HiddenFor(m => m.LaundryRoomId, Model.LaundryRoomId)
+    }
+</div>
+
+<br />
+
+<div>
+    <p>
+        Week: <b>@Model.WeekNumber</b>
+    </p>
+</div>
+
+<div id="schedule">
+    <table class="paddedTableRows" style="width: 50%">
+        @foreach (var day in Model.Days)
+        {
+            <tr>
+                <td>
+                    @day.ToShortDateString()
+                </td>
+
+                @foreach (var session in Model.Sessions.Where(s => s.StartTime.Date == day))
+                {
+                    @if (session.IsSessionScheduled)
+                    {
+                        <td style="background: red">
+                            @session.StartTime.ToString("t") - @session.EndTime.ToString("t")
+                        </td>
+                    }
+
+                    else
+                    {
+                        <td style="background: lightgreen">
+                            <div style="display: flex">
+                                <div>
+                                    @session.StartTime.ToString("t") - @session.EndTime.ToString("t")
+                                </div>
+                                <div>
+                                    @using (Html.BeginForm("AddBookingSession", "Home", FormMethod.Post))
+                                    {
+                                        @Html.Hidden("startTime", session.StartTime)
+                                        @Html.Hidden("endTime", session.EndTime)
+                                        @Html.HiddenFor(m => m.WeekNumber, Model.WeekNumber)
+                                        @Html.HiddenFor(m => m.LaundryRoomId, Model.LaundryRoomId)
+
+                                        <input type="submit" value="Reserve" />
+                                    }
+                                </div>
+                            </div>
+                        </td>
+                    }
+                }
+            </tr>
+        }
+    </table>
+</div>
+
+<br />
+
+<div>
+    <table>
+        <tr>
+            <td style="width: 40px; background: lightgreen"></td>
+            <td>= free</td>
+        </tr>
+        <tr>
+            <td style="background: red"></td>
+            <td>= occupied</td>
+        </tr>
+    </table>
+</div>
+
+@if (TempData["ReservationSuccess"] != null || TempData["ReservationFail"] != null)
+{
+    <p style="color: green">@TempData["ReservationSuccess"]</p>
+    <p style="color: red">@TempData["ReservationError"]</p>
+}
+
+
+@*@section Scripts {
+        <script>
+
+            //SAVED CODE FOR FURTHER AJAX IMPLEMENTATION
+            function addBookingSession(session, weekNumber, laundryRoomId) {
+                debugger;
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/AddBookingSession",
+                    data: ****,
+                    success: function (data) {
+                        $("body").html(data);
+                    },
+                    error: function (error) {
+                        alert(error);
+                    }
+                });
+            }
+        </script>
+    }*@

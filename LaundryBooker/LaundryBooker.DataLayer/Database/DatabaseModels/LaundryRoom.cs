@@ -6,7 +6,6 @@
     public class LaundryRoom
     {
         public int Id { get; set; }
-
         public int BuildingId { get; set; }
         public Building Building { get; set; }
 

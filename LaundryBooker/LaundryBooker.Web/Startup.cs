@@ -1,3 +1,6 @@
+using AutoMapper;
+using LaundryBooker.Web.Profiles;
+
 namespace LaundryBooker.Web
 {
     using DataLayer.Repository;
@@ -21,6 +24,7 @@ namespace LaundryBooker.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(typeof(UserProfile));
             services.AddTransient<IBookingSessionService, BookingSessionService>();
             services.AddTransient<IBookingSessionRepository, BookingSessionRepository>();
             services.AddControllersWithViews();

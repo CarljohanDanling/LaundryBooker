@@ -1,5 +1,7 @@
 ﻿namespace LaundryBooker.DataLayer.Repository
 {
+    using AutoMapper;
+    using Models;
     using Database.Enumerations;
     using System;
     using System.Collections.Generic;
@@ -13,83 +15,47 @@
     public class BookingSessionRepository : IBookingSessionRepository
     {
         private readonly LaundryContext _laundryContext;
+        private readonly IMapper _mapper;
 
-        public BookingSessionRepository(LaundryContext laundryContext)
+        public BookingSessionRepository(LaundryContext laundryContext, IMapper mapper)
         {
             _laundryContext = laundryContext;
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<BookingSessionDto>> GetBookingSessionsWithinDateRange(DateTime fromDate, DateTime toDate)
+        public async Task<IEnumerable<BookingSessionDto>> GetLaundryRoomBookingSessionsWithinDateRange
+            (int laundryRoomId, DateTime fromDate, DateTime toDate)
         {
             var scheduledSessions = await _laundryContext.BookingSessions
                 .Where(bs =>
                     bs.StartTime >= fromDate &&
-                    bs.EndTime <= toDate &&
-                    bs.SessionStatus == BookingSessionStatus.Scheduled
-                )
+                    bs.EndTime.Date <= toDate.Date &&
+                    bs.SessionStatus == BookingSessionStatus.Scheduled &&
+                    bs.LaundryRoomId == laundryRoomId)
                 .ToListAsync();
 
-            var scheduledSessionsDto = new List<BookingSessionDto>();
-
-            foreach (var bs in scheduledSessions)
-            {
-                scheduledSessionsDto.Add(new BookingSessionDto
-                {
-                    Id = bs.Id,
-                    StartTime = bs.StartTime,
-                    EndTime = bs.EndTime,
-                    SessionStatus = bs.SessionStatus.ToString(),
-                    LaundryRoomId = bs.LaundryRoomId,
-                    TenantId = bs.TenantId
-                }
-                );
-            }
-
-            return scheduledSessionsDto;
+            return _mapper.Map<List<BookingSessionDto>>(scheduledSessions);
         }
 
-        public async Task<IEnumerable<BookingSessionDto>> GetBookingSessions()
+        public async Task<IEnumerable<BuildingDto>> GetBuildings()
         {
-            var bookingSessions = await _laundryContext.BookingSessions.ToListAsync();
-            var bookingSessionsDto = new List<BookingSessionDto>();
+            var buildings = await _laundryContext.Buildings.Include(b => b.LaundryRoom)
+                .AsNoTracking()
+                .ToListAsync();
 
-            foreach (var bs in bookingSessions)
-            {
-                bookingSessionsDto.Add(new BookingSessionDto
-                {
-                    Id = bs.Id,
-                    StartTime = bs.StartTime,
-                    EndTime = bs.EndTime,
-                    SessionStatus = bs.SessionStatus.ToString(),
-                    LaundryRoomId = bs.LaundryRoomId,
-                    TenantId = bs.TenantId
-                }
-                );
-            }
+            var buildingsDto = _mapper.Map<List<BuildingDto>>(buildings);
 
-            return bookingSessionsDto;
+            return buildingsDto;
         }
 
-        public async Task<BookingSessionDto> GetBookingSession(Guid bookingSessionId)
+        public async Task<bool> AddBookingSession(AddBookingSessionModel addBookingSession)
         {
-            var bookingSession = await _laundryContext.BookingSessions
-                .Where(bs => bs.Id == bookingSessionId)
-                .FirstOrDefaultAsync();
+            var bookingSession = _mapper.Map<BookingSession>(addBookingSession);
 
-            return new BookingSessionDto
-            {
-                Id = bookingSession.Id,
-                StartTime = bookingSession.StartTime,
-                EndTime = bookingSession.EndTime,
-                SessionStatus = bookingSession.SessionStatus.ToString(),
-                LaundryRoomId = bookingSession.LaundryRoomId,
-                TenantId = bookingSession.TenantId
-            };
-        }
+            await _laundryContext.BookingSessions.AddAsync(bookingSession);
+            var success = await _laundryContext.SaveChangesAsync();
 
-        public void AddBookingSession(BookingSession bookingSession)
-        {
-            throw new NotImplementedException();
+            return success > 0;
         }
 
         public void UpdateBookingSession(BookingSession bookingSession)

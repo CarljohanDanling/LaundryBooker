@@ -1,41 +1,9 @@
-﻿@using System.Globalization
+﻿@model LaundryBooker.Web.ViewModels.BuildingViewModel
 
-@{ var week = ISOWeek.GetWeekOfYear(DateTime.Today);}
+@using (Html.BeginForm("Schedule", "Home", FormMethod.Post))
+{
+    <label>Välj byggnad:</label>
+    @Html.DropDownListFor(b => b.LaundryRoomId, new SelectList(Model.Buildings, "LaundryRoomId", "BuildingName"))
 
-<input type="button" id="btnPrevious" class="weekSelector" value="Previous week" />
-<input type="button" id="btnNext" class="weekSelector" value="Next week" />
-
-<div id="schedule">
-    @await Component.InvokeAsync("WeeklyScheduleComponent", week)
-</div>
-
-@section Scripts {
-    <script>
-
-        let selectedWeek = @week;
-
-        $(function() {
-            $(".weekSelector").click(function(e) {
-
-                if (e.currentTarget.id === "btnPrevious") {
-                    selectedWeek = selectedWeek - 1;
-                } else {
-                    selectedWeek = selectedWeek + 1;
-                }
-
-                $.ajax({
-                    type: "GET",
-                    url: "/Home/UpdateViewComponent",
-                    data: { weekNumber: selectedWeek },
-                    dataType: "text",
-                    success: function(data) {
-                        $("#schedule").html(data);
-                    },
-                    error: function(req, status, error) {
-                        alert(error);
-                    }
-                });
-            });
-        });
-    </script>
+    <input type="submit" value="Gå till schema" />
 }

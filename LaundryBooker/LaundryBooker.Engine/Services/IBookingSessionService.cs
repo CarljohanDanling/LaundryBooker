@@ -1,5 +1,6 @@
 ﻿namespace LaundryBooker.Engine.Services
 {
+    using Dto;
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -7,7 +8,13 @@
 
     public interface IBookingSessionService
     {
-        Task<IEnumerable<BookingSessionDto>> GetBookingSessions();
-        Task<IEnumerable<BookingSessionDto>> GetBookingSessionsWithinDateRange(DateTime fromDate, DateTime toDate);
+        Task<ScheduleDto> GetSchedule(int laundryRoomId, int weekNumber);
+
+        Task<IEnumerable<BookingSessionDto>> GetLaundryRoomBookingSessionsWithinDateRange
+            (int laundryRoomId, DateTime fromDate, DateTime toDate);
+
+        Task<IEnumerable<BuildingDto>> GetBuildings();
+
+        Task<bool> AddBookingSession(AddBookingSessionDto bookingSessionDto);
     }
 }
